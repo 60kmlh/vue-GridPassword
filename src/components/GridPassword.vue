@@ -4,15 +4,13 @@
      v-if='isNumber'
      class="hidden_input"
      type="tel"
-     style="margin-left:9999999px" 
      ref="hiddenInput" 
-     @input="controlInput" 
+     @input="controlInput"
      v-model="hiddenInput" />
     <input
      v-else
      class="hidden_input"
-     type="text" 
-     style="margin-left:9999999px" 
+     type="text"
      ref="hiddenInput" 
      @input="controlInput" 
      v-model="hiddenInput" />
@@ -61,6 +59,7 @@
       controlInput() {
         if(this.hiddenInput.length == this.passwordLength && !this.isBtnCtr) {
             this.onConfirm(this.hiddenInput)
+            this.$refs.hiddenInput.blur()
             this.showPanel = false
         }
         if(this.hiddenInput.length > this.passwordLength) {
@@ -135,6 +134,7 @@
     position: absolute; 
     opacity: 0; 
     filter:Alpha(opacity=0);
+    margin-left:9999999px
   }
   .wrap {
     width: 80vw;
