@@ -26,7 +26,6 @@
       <button @click='show=true'>调出输入框</button> 
     </div>
     <GridPassword
-     ref="pas"
      v-if='show' 
      :passwordLength='gridNum' 
      :onConfirm='onConfirm' 
