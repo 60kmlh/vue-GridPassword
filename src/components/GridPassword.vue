@@ -1,5 +1,5 @@
 <template>
-  <div class="pop" v-if='showPanel' @click='focusInput()'>
+  <div class="pop" @click='focusInput()' @touchmove='(e) => {e.preventDefault()}'>
     <input
      v-if='isNumber'
      class="hidden_input"
@@ -15,6 +15,9 @@
      @input="controlInput" 
      v-model="hiddenInput" />
      <div class="wrap">
+       <div style="height: 25px">
+         <span class="close" @click='close'></span>
+       </div>    
        <div class="tip">{{tip}}</div>
       <div class="input_list" v-if='isPassword'>
         <input
@@ -35,7 +38,7 @@
          disabled='true' />
       </div>
       <div class="btn_list" v-if='isBtnCtr'>
-        <button class="btn" @click='cancel'>取消</button>
+        <button class="btn" @click='close'>取消</button>
         <button class="btn btn_confirm" @click='confirm'>确认</button>
       </div>
      </div>
@@ -46,7 +49,6 @@
   export default {
     data() {
       return {
-        showPanel: true,
         hiddenInput: ""
       }
     },
@@ -60,7 +62,6 @@
         if(this.hiddenInput.length == this.passwordLength && !this.isBtnCtr) {
             this.onConfirm(this.hiddenInput)
             this.$refs.hiddenInput.blur()
-            this.showPanel = false
         }
         if(this.hiddenInput.length > this.passwordLength) {
             this.hiddenInput = this.hiddenInput.slice(0, this.passwordLength)
@@ -69,18 +70,17 @@
       focusInput() {
         this.$refs.hiddenInput.focus()
       },
-      cancel(e) {
-        e.stopPropagation()
-        this.showPanel = false
-      },
       confirm(e) {
         e.stopPropagation()
         if(this.hiddenInput.length == this.passwordLength) {
             this.onConfirm(this.hiddenInput)
-            this.showPanel = false
         }else {
           this.focusInput()
         }
+      },
+      close(e) {
+        e.stopPropagation()
+        this.onClose()
       }
     },
     props: {
@@ -113,6 +113,10 @@
         require: false
       },
       onConfirm: {
+        type: Function,
+        require: true
+      },
+      onClose: {
         type: Function,
         require: true
       }
@@ -195,5 +199,40 @@
   }
   .btn_confirm:active {
     background-color: #4db3ff;
+  }
+  .close {
+    position: relative;
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    overflow: hidden;
+    float: right;
+  }
+  .close:hover::before, .close:hover::after {
+    background: #20a0ff;
+  }
+  .close::before, .close::after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    top: 50%;
+    left: 0;
+    margin-top: -1px;
+    background: #bfcbd9;
+  }
+  .close::before {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  .close::after {
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    -ms-transform: rotate(-45deg);
+    -o-transform: rotate(-45deg);
+    transform: rotate(-45deg);
   }
 </style>
